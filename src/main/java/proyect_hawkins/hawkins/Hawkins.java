@@ -43,9 +43,8 @@ public class Hawkins {
                 break;
             default:
                 break;
-            
         }
-        }while(opcionMenu == 0);
+        }while(opcionMenu != 0);
 
     }
     public static void mostrarEncabezado(String operadorActual){
