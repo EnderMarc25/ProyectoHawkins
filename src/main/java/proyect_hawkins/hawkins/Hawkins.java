@@ -14,16 +14,15 @@ import java.util.Scanner;
 public class Hawkins {
 
     public static void main(String[] args) {
+        Scanner sc= new Scanner(System.in);
         final double MAX_ENERGIA = 200;
         final double LIMITE_RIESGO = 150;
         String operadorActual;
-        double sensorMedido;
+        String teclado = "Introduce lectura μT";
         int codigoRiesgo;
         int porcentajeEstado;
         boolean portalAbierto;
-        String teclado = "Introduce lectura μT";
         int opcionMenu;
-        Scanner sc= new Scanner(System.in);
         
         System.out.println("Introduce Tu nombre de usuario: ");
         operadorActual = sc.nextLine();
@@ -36,7 +35,8 @@ public class Hawkins {
             opcionMenu = sc.nextInt();
             switch(opcionMenu){
             case 1:
-                leerLecturaSegura(sc,teclado);
+                double sensorMedido = leerLecturaSegura(sc,teclado);
+                System.out.println(sensorMedido);
                     break;
             case 2:
                 
@@ -51,14 +51,18 @@ public class Hawkins {
     public static void mostrarEncabezado(String operadorActual){
         System.out.println(operadorActual);
     }
-    public static void leerLecturaSegura(Scanner sc,String teclado){
-        double sensorMedio;
-        try{
-                    
-        System.out.println(teclado);
-        sensorMedio= sc.nextDouble();
-        }catch(InputMismatchException e){
-            System.out.println("Dato invalido");
+    public static double leerLecturaSegura(Scanner sc,String teclado){
+        double sensorMedido=0;
+        boolean exito = false;
+        while(!exito){
+            try{
+            System.out.println(teclado);
+            sensorMedido= sc.nextDouble();
+            exito = true;
+            }catch(InputMismatchException e){
+                System.out.println("Dato invalido");
+            }
         }
+        return sensorMedido;
     }
 }
