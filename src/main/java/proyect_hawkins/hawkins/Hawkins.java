@@ -4,6 +4,7 @@
 
 package proyect_hawkins.hawkins;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -20,6 +21,7 @@ public class Hawkins {
         int codigoRiesgo;
         int porcentajeEstado;
         boolean portalAbierto;
+        String teclado = "Introduce lectura μT";
         int opcionMenu;
         Scanner sc= new Scanner(System.in);
         
@@ -28,13 +30,35 @@ public class Hawkins {
         mostrarEncabezado(operadorActual);
         do{
             System.out.print("---System Hawkins---");
-            System.out.println("1. Inspeccionar Sensor Individual");
-            System.out.println("2. Iniciar Muestreo Continuo");
-            System.out.println("0. Salir de la Consola");
+            System.out.print("1. Inspeccionar Sensor Individual ");
+            System.out.print("2. Iniciar Muestreo Continuo ");
+            System.out.print("0. Salir de la Consola");
             opcionMenu = sc.nextInt();
-        }while()
+            switch(opcionMenu){
+            case 1:
+                leerLecturaSegura(sc,teclado);
+                    break;
+            case 2:
+                
+                break;
+            default:
+                break;
+            
+        }
+        }while(opcionMenu == 0);
+
     }
     public static void mostrarEncabezado(String operadorActual){
         System.out.println(operadorActual);
+    }
+    public static void leerLecturaSegura(Scanner sc,String teclado){
+        double sensorMedio;
+        try{
+                    
+        System.out.println(teclado);
+        sensorMedio= sc.nextDouble();
+        }catch(InputMismatchException e){
+            System.out.println("Dato invalido");
+        }
     }
 }
