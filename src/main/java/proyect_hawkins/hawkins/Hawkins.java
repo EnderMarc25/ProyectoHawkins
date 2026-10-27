@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class Hawkins {
     public static void main(String[]args) {
-Scanner sc= new Scanner(System.in);
+    Scanner sc= new Scanner(System.in);
     final double MAX_ENERGIA = 200;
     final double LIMITE_RIESGO = 150;
     String operadorActual;
@@ -34,17 +34,19 @@ Scanner sc= new Scanner(System.in);
         case 1:
             double sensorMedido = leerLecturaSegura(sc,"Introduce lectura μT");
             codigoRiesgo = evaluarNivelRiesgo(sensorMedido, LIMITE_RIESGO);
-            System.out.println(codigoRiesgo);
-                break;
+            porcentajeEstado=calcularPorcentajeTruncado(sensorMedido, MAX_ENERGIA);
+            break;
         default:
             break;
-    }
+        }
     }while(opcionMenu != 0);
-}
-public static void mostrarEncabezado(String operadorActual){
-    System.out.println(operadorActual);
-}
-public static double leerLecturaSegura(Scanner sc,String teclado){
+    }
+    
+    public static void mostrarEncabezado(String operador){
+    System.out.println(operador);
+    }
+    
+    public static double leerLecturaSegura(Scanner sc,String teclado){
     double sensorMedido=0;
     boolean exito = false;
     while(!exito){
@@ -57,8 +59,9 @@ public static double leerLecturaSegura(Scanner sc,String teclado){
         }
     }
     return sensorMedido;
-}
-public static int evaluarNivelRiesgo(double microTeslas,double LIMITE_RIESGO){
+    }
+    
+    public static int evaluarNivelRiesgo(double microTeslas,double LIMITE_RIESGO){
     int codigo = 0;
     if(microTeslas< 50){
         codigo = 1;
@@ -68,9 +71,15 @@ public static int evaluarNivelRiesgo(double microTeslas,double LIMITE_RIESGO){
         }else{
             codigo = 2;
         }
-        }
-    String mensaje = (codigo==1) ? "Seguro":  (mensaje = (codigo==2)? "Alerta":"Crítico");
+    }
+    String mensaje = (codigo==1) ? "Seguro":  (mensaje = (codigo==2)? "Alerta," + (LIMITE_RIESGO-microTeslas) + " hasta alcanzar LIMITE_RIESGO" :"Crítico");
     System.out.println(mensaje);
     return codigo;
+    }
+    
+    public static int calcularPorcentajeTruncado(double lectura, double MAX_ENERGIA){
+        double calculo = (lectura/MAX_ENERGIA) * 100;
+            int porcentaje = (int) calculo;
+                return porcentaje;
     }
 }
