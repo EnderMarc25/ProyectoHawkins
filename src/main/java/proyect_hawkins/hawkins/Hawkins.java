@@ -12,40 +12,37 @@ import java.util.Scanner;
  * @author endermarc
  */
 public class Hawkins {
-    public static void main(String[]args) { 
-    Scanner sc= new Scanner(System.in); 
-    final double MAX_ENERGIA = 200; 
-    final double LIMITE_RIESGO = 150; 
-    String operadorActual; 
-    int codigoRiesgo; 
-    int porcentajeEstado; 
-    boolean portalAbierto; 
-    int opcionMenu; 
-    System.out.println("Introduce Tu nombre de usuario: "); 
-    operadorActual = sc.nextLine(); 
-    mostrarEncabezado(operadorActual); 
-    do{ 
-        System.out.print("---System Hawkins---"); 
-        System.out.print("1. Inspeccionar Sensor Individual "); 
-        System.out.print("2. Iniciar Muestreo Continuo "); 
-        System.out.print("0. Salir de la Consola"); 
-        opcionMenu = sc.nextInt(); 
-        switch(opcionMenu){ 
-            case 2: 
-                break; 
-        case 1: 
-            double sensorMedido = leerLecturaSegura(sc,"Introduce lectura μT"); 
-            codigoRiesgo = evaluarNivelRiesgo(sensorMedido, LIMITE_RIESGO); 
-            porcentajeEstado=calcularPorcentajeTruncado(sensorMedido, MAX_ENERGIA); 
-            portalAbierto=ejecutarProtocoloAccion(codigoRiesgo); 
-            System.out.println("Capacidad de energia al " + porcentajeEstado + "%"); 
-            if (portalAbierto){ 
-                System.out.println("El portal está abierto"); 
-            }else{ 
-                System.out.println("El portal permanece cerrado"); 
-            } 
-            break; 
-        case 0: 
+    public static void main(String[]args) {
+    Scanner sc= new Scanner(System.in);
+    final double MAX_ENERGIA = 200;
+    final double LIMITE_RIESGO = 150;
+    String operadorActual;
+    int codigoRiesgo;
+    int porcentajeEstado;
+    boolean portalAbierto;
+    int opcionMenu;
+    System.out.println("Introduce Tu nombre de usuario: ");
+    operadorActual = sc.nextLine();
+    do{
+        mostrarEncabezado(operadorActual);
+        opcionMenu = sc.nextInt();
+        switch(opcionMenu){
+            case 2:
+                simularMuestreoContinuo(sc,LIMITE_RIESGO);
+                break;
+        case 1:
+            double sensorMedido = leerLecturaSegura(sc,"Introduce lectura μT");
+            codigoRiesgo = evaluarNivelRiesgo(sensorMedido, LIMITE_RIESGO);
+            porcentajeEstado=calcularPorcentajeTruncado(sensorMedido, MAX_ENERGIA);
+            portalAbierto=ejecutarProtocoloAccion(codigoRiesgo);
+            System.out.println("Capacidad de energia al " + porcentajeEstado + "%");
+            if (portalAbierto){
+                System.out.println("El portal está abierto");
+            }else{
+                System.out.println("El portal permanece cerrado");
+            }
+            break;
+        case 0:
             System.out.println("Finalizando sistema");
             break;
         default:
@@ -56,15 +53,19 @@ public class Hawkins {
     }
     
     public static void mostrarEncabezado(String operador){
-    System.out.println(operador);
+    System.out.println("hola, <" + operador+">");
+    System.out.printf("--- System Hawkins ---\n");
+    System.out.printf("%s\n", "1.Inspeccionar Sensor Individual");
+    System.out.printf("%s\n", "2.Iniciar Muestreo Continuo");
+    System.out.printf("%s\n", "0.Salir de la Consola");
     }
     
-    public static double leerLecturaSegura(Scanner sc,String teclado){
+    public static double leerLecturaSegura(Scanner sc,String mensaje){
     double sensorMedido=0;
     boolean exito = false;
     while(!exito){
         try{
-            System.out.println(teclado);
+            System.out.println(mensaje);
             sensorMedido= sc.nextDouble();
             exito = true;
         }catch(InputMismatchException e){
@@ -85,7 +86,7 @@ public class Hawkins {
             codigo = 2;
         }
     }
-    String mensaje = (codigo==1) ? "Seguro":  (mensaje = (codigo==2)? "Alerta," + (LIMITE_RIESGO-microTeslas) + " hasta alcanzar LIMITE_RIESGO" :"Crítico");
+    String mensaje = (codigo==1) ? "Seguro":  (mensaje = (codigo==2)? "Alerta," + (LIMITE_RIESGO-microTeslas) + " hasta alcanzar LIMITE_RIESGO(150)" :"Crítico");
     System.out.println(mensaje);
     return codigo;
     }
@@ -110,6 +111,33 @@ public class Hawkins {
             default:
                 System.out.println("Código no válido");
                 return false;
+        }
+    }
+    
+    public static void simularMuestreoContinuo(Scanner sc, double limite){
+        double lec=0;
+        double total=0;
+        int div=0;
+        while(lec>=0){
+            lec = leerLecturaSegura(sc,"Introduce lectura μT");
+            if(lec==0){
+                continue;
+            }
+            if(lec<0){
+                break;
+            }else{
+                if(lec<=limite){
+                    
+                }else{
+                    System.out.println("Alerta, umbral superado");
+                }
+            }
+            div=div + 1;
+            total=total+lec;
+        }
+        if(div>0){
+            double med=total/div;
+            System.out.printf("Media de las lecturas: %.2f%n", med);
         }
     }
 }
